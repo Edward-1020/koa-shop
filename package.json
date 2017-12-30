@@ -1,0 +1,37 @@
+{
+  "name": "mmall",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Edward",
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint ./src",
+    "fix": "eslint ./src --fix",
+    "start": "eslint ./src --fix && eslint ./src && nodemon ./src/main/app.js",
+    "model": "sequelize-auto -o './src/main/dao' -h localhost -d mm_shop -u root -x '' "
+  },
+  "devDependencies": {
+    "eslint": "^4.13.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "nodemon": "^1.12.5",
+    "sequelize-auto": "^0.4.29"
+  },
+  "dependencies": {
+    "jsonwebtoken": "^8.1.0",
+    "koa": "^2.4.1",
+    "koa-bodyparser": "^4.2.0",
+    "koa-jwt": "^3.3.0",
+    "koa-route": "^3.2.0",
+    "koa-router": "^7.3.0",
+    "koa-session": "^5.5.1",
+    "moment": "^2.20.1",
+    "mysql": "^2.15.0",
+    "mysql2": "^1.5.1",
+    "ramda": "^0.25.0",
+    "sequelize": "^4.27.0"
+  }
+}
