@@ -12,4 +12,14 @@ router.post('add_category', async (ctx, next) => {
   await next();
 });
 
+router.get('set_category_name', async (ctx, next) => {
+  await categoryController.setCategoryName(ctx);
+  await next();
+});
+
+router.get('get_category', async (ctx, next) => {
+  await categoryController.getChildrenParallelCategory(ctx);
+  await next();
+});
+
 module.exports = router;
