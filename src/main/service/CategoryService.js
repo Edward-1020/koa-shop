@@ -1,9 +1,14 @@
 const R = require('ramda');
 const moment = require('moment');
 const ServerResponse = require('../common/ServerResponse');
-const { insert, updateCategorySelective, selectCategoryChildrenByParenId } = require('../dao/mm_category');
+const { insert, updateCategorySelective, selectCategoryChildrenByParenId, selectByPrimaryId } = require('../dao/mm_category');
 
 class CategoryService {
+  /**
+   * 添加商品分类
+   * @param {*} categoryName
+   * @param {*} parentId
+   */
   async addCategory (categoryName, parentId) {
     if (!R.trim(categoryName) || !parentId) {
       return ServerResponse.createByErrorMsg(`添加品类参数错误`);
@@ -23,6 +28,11 @@ class CategoryService {
     return ServerResponse.createByErrorMsg(`添加品类失败`);
   }
 
+  /**
+   * 更新商品分类
+   * @param {*} categoryId
+   * @param {*} categoryName
+   */
   async updateCategoryName (categoryId, categoryName) {
     if (!R.trim(categoryName) || !categoryId) {
       return ServerResponse.createByErrorMsg(`更新品类参数错误`);
@@ -39,6 +49,10 @@ class CategoryService {
     return ServerResponse.createByErrorMsg(`更新品类名字失败`);
   }
 
+  /**
+   * 查找当前分类的平级子分类
+   * @param {*} categoryId
+   */
   async getChildrenParallelCategory (categoryId = 0) {
     const categoryModelArr = await selectCategoryChildrenByParenId(categoryId);
     if (!categoryModelArr.length) {
@@ -49,6 +63,44 @@ class CategoryService {
       categoryChildren.push(categoryModel.get());
     });
     return ServerResponse.createBySuccessData(categoryChildren);
+  }
+
+  /**
+   * 递归查询本节点的id及孩子父节点的id
+   * @param {*} categoryId
+   */
+  async selectCategoryAndChildrenById (categoryId) {
+    let categoryArr = [];
+    const categoryService = new CategoryService();
+    categoryService.findChildCategory(categoryArr, categoryId);
+    if (!categoryArr.length) {
+      return ServerResponse.createByErrorMsg(`未找到当前分类及子分类`);
+    }
+    let categoryIdArr = [];
+    categoryArr.forEach((category) => {
+      categoryIdArr.push(category.id);
+    });
+    return ServerResponse.createBySuccessData(categoryArr);
+  }
+
+  // 算出子节点
+  async findChildCategory (categoryArr, categoryId) {
+    const categoryModel = await selectByPrimaryId(categoryId);
+    if (categoryModel) {
+      const category = categoryModel.get();
+      categoryArr.push(category);
+    }
+    // 递归查找子节点
+    const categoryModelChildrenArr = await selectCategoryChildrenByParenId(categoryId);
+    if (!categoryModelChildrenArr.length) {
+      return categoryArr;
+    }
+    categoryModelChildrenArr.forEach((category) => {
+      categoryArr.push(category.get());
+      const categoryService = new CategoryService();
+      categoryService.findChildCategory(categoryArr, category.get('id'));
+    });
+    return categoryArr;
   }
 }
 

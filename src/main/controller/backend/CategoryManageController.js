@@ -74,6 +74,26 @@ class CategoryManageController {
       ctx.body = JSON.stringify(ServerResponse.createByErrorCodeMsg(`无权限操作，需要管理员权限`));
     }
   }
+
+  async getCategoryChildrenAndDeepChildrenCategory (ctx) {
+    const user = ctx.session[ConstUser.CURRENT_USER];
+    if (!user) {
+      ctx.body = JSON.stringify(ServerResponse.createByErrorCodeMsg(ResponseCode.NEED_LOGIN, `用户未登录，请登录`));
+      return;
+    }
+    //  校验一下是否是管理员
+    const userService = new UserService();
+    const serverResponse = await userService.checkAdminRole(user);
+    if (serverResponse.isSuccess()) {
+      // 查询当前节点id和递归子节点的id
+      const { categoryId } = ctx.query;
+      const categoryService = new CategoryService();
+      const categoryServerResponse = await categoryService.selectCategoryAndChildrenById(categoryId);
+      ctx.body = JSON.stringify(ServerResponse.createBySuccessData(categoryServerResponse));
+    } else {
+      ctx.body = JSON.stringify(ServerResponse.createByErrorCodeMsg(`无权限操作，需要管理员权限`));
+    }
+  }
 }
 
 module.exports = CategoryManageController;

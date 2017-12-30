@@ -33,4 +33,14 @@ const selectCategoryChildrenByParenId = async (categoryId) => {
   });
 };
 
-module.exports = { insert, updateCategorySelective, selectCategoryChildrenByParenId };
+//  递归算法，算出子节点
+const selectByPrimaryId = async (categoryId) => {
+  return Category.findOne({
+    attributes: ['id', 'parent_id', 'name', 'status'],
+    where: {
+      'id': categoryId
+    }
+  });
+};
+
+module.exports = { insert, updateCategorySelective, selectCategoryChildrenByParenId, selectByPrimaryId };

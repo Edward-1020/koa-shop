@@ -22,4 +22,9 @@ router.get('get_category', async (ctx, next) => {
   await next();
 });
 
+router.get('get_deep_category', async (ctx, next) => {
+  await categoryController.getCategoryChildrenAndDeepChildrenCategory(ctx);
+  await next();
+});
+
 module.exports = router;
