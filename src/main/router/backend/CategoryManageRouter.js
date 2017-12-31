@@ -4,7 +4,7 @@ const CategoryController = require('../../controller/backend/CategoryManageContr
 const categoryController = new CategoryController();
 
 const router = new Router({
-  prefix: '/manage/category'
+  prefix: '/manage/category/'
 });
 
 router.post('add_category', async (ctx, next) => {

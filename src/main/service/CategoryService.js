@@ -72,7 +72,7 @@ class CategoryService {
   async selectCategoryAndChildrenById (categoryId) {
     let categoryArr = [];
     const categoryService = new CategoryService();
-    categoryService.findChildCategory(categoryArr, categoryId);
+    await categoryService.findChildCategory(categoryArr, categoryId);
     if (!categoryArr.length) {
       return ServerResponse.createByErrorMsg(`未找到当前分类及子分类`);
     }
@@ -80,7 +80,7 @@ class CategoryService {
     categoryArr.forEach((category) => {
       categoryIdArr.push(category.id);
     });
-    return ServerResponse.createBySuccessData(categoryArr);
+    return ServerResponse.createBySuccessData(categoryIdArr);
   }
 
   // 算出子节点
@@ -95,10 +95,10 @@ class CategoryService {
     if (!categoryModelChildrenArr.length) {
       return categoryArr;
     }
-    categoryModelChildrenArr.forEach((category) => {
+    categoryModelChildrenArr.forEach(async (category) => {
       categoryArr.push(category.get());
       const categoryService = new CategoryService();
-      categoryService.findChildCategory(categoryArr, category.get('id'));
+      await categoryService.findChildCategory(categoryArr, category.get('id'));
     });
     return categoryArr;
   }

@@ -65,7 +65,7 @@ class CategoryManageController {
     const userService = new UserService();
     const serverResponse = await userService.checkAdminRole(user);
     if (serverResponse.isSuccess()) {
-      const categoryId = ctx.query;
+      const { categoryId } = ctx.query;
       // 查询子节点的category信息，并且不递归，保持平级
       const categoryService = new CategoryService();
       const categoryServerResponse = await categoryService.getChildrenParallelCategory(categoryId);

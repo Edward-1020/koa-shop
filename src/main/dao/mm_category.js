@@ -3,7 +3,7 @@ const path = require('path');
 
 const Category = sequelize.import(path.resolve(__dirname, '../model/mmall_category.js'));
 
-const insert = async (category) => {
+const insert = (category) => {
   return Category.create({
     'parent_id': category.parentId,
     'name': category.name,
@@ -13,7 +13,7 @@ const insert = async (category) => {
   });
 };
 
-const updateCategorySelective = async (category) => {
+const updateCategorySelective = (category) => {
   return Category.update({
     'name': category.name,
     'update_time': category.updateTime
@@ -24,7 +24,7 @@ const updateCategorySelective = async (category) => {
   });
 };
 
-const selectCategoryChildrenByParenId = async (categoryId) => {
+const selectCategoryChildrenByParenId = (categoryId) => {
   return Category.findAll({
     attributes: ['id', 'parent_id', 'name', 'status'],
     where: {
@@ -34,7 +34,7 @@ const selectCategoryChildrenByParenId = async (categoryId) => {
 };
 
 //  递归算法，算出子节点
-const selectByPrimaryId = async (categoryId) => {
+const selectByPrimaryId = (categoryId) => {
   return Category.findOne({
     attributes: ['id', 'parent_id', 'name', 'status'],
     where: {
