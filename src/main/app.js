@@ -11,6 +11,13 @@ app.use(session(sessionConfig, app));
 app.use(bodyparser());
 app.use(userRouter.routes());
 app.use(categoryRouter.routes());
+
+app.on('error', function (err, ctx) {
+  if (process.env.NODE_ENV !== 'dev') {
+    ctx.body = err.message;
+  }
+});
+
 app.listen(3000, () => {
   console.log('app is starting at port 3000');
 });

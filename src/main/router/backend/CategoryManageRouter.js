@@ -4,25 +4,25 @@ const CategoryController = require('../../controller/backend/CategoryManageContr
 const categoryController = new CategoryController();
 
 const router = new Router({
-  prefix: '/manage/category/'
+  prefix: '/manage/category'
 });
 
-router.post('add_category', async (ctx, next) => {
+router.post('/add_category', async (ctx, next) => {
   await categoryController.addCategory(ctx);
   await next();
 });
 
-router.get('set_category_name', async (ctx, next) => {
+router.get('/set_category_name', async (ctx, next) => {
   await categoryController.setCategoryName(ctx);
   await next();
 });
 
-router.get('get_category', async (ctx, next) => {
+router.get('/get_category', async (ctx, next) => {
   await categoryController.getChildrenParallelCategory(ctx);
   await next();
 });
 
-router.get('get_deep_category', async (ctx, next) => {
+router.get('/get_deep_category', async (ctx, next) => {
   await categoryController.getCategoryChildrenAndDeepChildrenCategory(ctx);
   await next();
 });

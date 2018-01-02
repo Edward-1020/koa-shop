@@ -76,11 +76,11 @@ class CategoryService {
     if (!categoryArr.length) {
       return ServerResponse.createByErrorMsg(`未找到当前分类及子分类`);
     }
-    let categoryIdArr = [];
+    let categoryIdSet = new Set();
     categoryArr.forEach((category) => {
-      categoryIdArr.push(category.id);
+      categoryIdSet.add(category.id);
     });
-    return ServerResponse.createBySuccessData(categoryIdArr);
+    return ServerResponse.createBySuccessData(Array.from(categoryIdSet));
   }
 
   // 算出子节点
@@ -93,14 +93,13 @@ class CategoryService {
     // 递归查找子节点
     const categoryModelChildrenArr = await selectCategoryChildrenByParenId(categoryId);
     if (!categoryModelChildrenArr.length) {
-      return categoryArr;
+      return;
     }
     categoryModelChildrenArr.forEach(async (category) => {
       categoryArr.push(category.get());
       const categoryService = new CategoryService();
       await categoryService.findChildCategory(categoryArr, category.get('id'));
     });
-    return categoryArr;
   }
 }
 
