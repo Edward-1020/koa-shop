@@ -1,7 +1,4 @@
-const ConstUser = require('../../common/User');
 const ServerResponse = require('../../common/ServerResponse');
-const ResponseCode = require('../../common/ResponseCode');
-const UserService = require('../../service/UserService');
 const CategoryService = require('../../service/CategoryService');
 
 class CategoryManageController {

@@ -1,7 +1,3 @@
-const ConstUser = require('../../common/User');
-const ServerResponse = require('../../common/ServerResponse');
-const ResponseCode = require('../../common/ResponseCode');
-const UserService = require('../../service/UserService');
 const ProductManageService = require('../../service/ProductManageService');
 
 class ProductManageController {
@@ -10,24 +6,22 @@ class ProductManageController {
    * @param {*} ctx
    */
   async productSave (ctx) {
-    const user = ctx.session[ConstUser.CURRENT_USER];
-    if (!user) {
-      ctx.body = JSON.stringify(ServerResponse.createByErrorCodeMsg(ResponseCode.NEED_LOGIN, `用户未登录，请登录`));
-      return;
-    }
-    //  校验一下是否是管理员
-    const userService = new UserService();
-    const serverResponse = await userService.checkAdminRole(user);
-    if (serverResponse.isSuccess()) {
-      // 是管理员
-      let { product } = ctx.request.body;
-      const productManageService = new ProductManageService();
-      const serverResponse = await productManageService.saveOrUpdateProduct(product);
-      ctx.body = JSON.stringify(serverResponse);
-    } else {
-      ctx.body = JSON.stringify(ServerResponse.createByErrorCodeMsg(`无权限操作，需要管理员权限`));
-    }
+    // 是管理员
+    let { product } = ctx.request.body;
+    const productManageService = new ProductManageService();
+    const serverResponse = await productManageService.saveOrUpdateProduct(product);
+    ctx.body = JSON.stringify(serverResponse);
+  }
+
+  /**
+   * 更新产品销售状态
+   * @param {*} ctx
+   */
+  async setSaleStatus (ctx) {
+    const { productId, status } = ctx.query;
+    const productManageService = new ProductManageService();
+    const serverResponse = await productManageService.setSaleStatus(productId, status);
+    ctx.body = JSON.stringify(serverResponse);
   }
 }
-
 module.exports = ProductManageController;

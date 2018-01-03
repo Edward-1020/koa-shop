@@ -34,6 +34,24 @@ class ProductManageService {
       return ServerResponse.createBySuccessMsg(`新增产品失败`);
     }
   }
+
+  /**
+   * 更新产品销售状态
+   */
+  async setSaleStatus (productId, status) {
+    if (!productId || !status) {
+      return ServerResponse.createByErrorMsg(`参数不正确`);
+    }
+    let product = {};
+    product.id = productId;
+    product.status = status;
+    product.update_time = moment().format();
+    const [rowCount] = await updateByPrimaryKey(product);
+    if (rowCount > 0) {
+      return ServerResponse.createBySuccessMsg(`更新产品销售状态成功`);
+    }
+    return ServerResponse.createBySuccessMsg(`更新产品销售状态失败`);
+  }
 }
 
 module.exports = ProductManageService;
