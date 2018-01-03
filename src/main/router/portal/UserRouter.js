@@ -2,6 +2,7 @@ const Router = require('koa-router');
 const jwt = require('koa-jwt');
 const { qaKey } = require('../../common/KeyToken');
 const UserController = require('../../controller/portal/UserController');
+const { userLoginCheck } = require('../../middleware/userCheck');
 
 const router = new Router({
   prefix: '/user'
@@ -29,7 +30,7 @@ router.post('/check_valid', async (ctx, next) => {
   await next();
 });
 
-router.get('/get_user_info', async (ctx, next) => {
+router.get('/get_user_info', userLoginCheck(), async (ctx, next) => {
   await userController.getUserInfo(ctx);
   await next();
 });
@@ -44,17 +45,17 @@ router.post('/forget_check_answer', async (ctx, next) => {
   await next();
 });
 
-router.post('forget_reset_password', jwt({secret: qaKey}), async (ctx, next) => {
+router.post('/forget_reset_password', jwt({secret: qaKey}), async (ctx, next) => {
   await userController.forgetResetPassword(ctx);
   await next();
 });
 
-router.post('/reset_password', async (ctx, next) => {
+router.post('/reset_password', userLoginCheck(), async (ctx, next) => {
   await userController.resetPassword(ctx);
   await next();
 });
 
-router.post('/update_information', async (ctx, next) => {
+router.post('/update_information', userLoginCheck(), async (ctx, next) => {
   await userController.updateInformation(ctx);
   await next();
 });

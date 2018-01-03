@@ -51,13 +51,13 @@ class UserController {
    * 获取用户信息
    */
   async getUserInfo (ctx) {
-    const user = ctx.session[ConstUser.CURRENT_USER];
+    const user = ctx.state.sessionUser;
     if (user) {
       ctx.body = JSON.stringify(ServerResponse.createBySuccessData(user));
     }
-    if (!user) {
-      ctx.body = JSON.stringify(ServerResponse.createByErrorMsg(`用户未登录，无法获取当前用户信息`));
-    }
+    // if (!user) {
+    //   ctx.body = JSON.stringify(ServerResponse.createByErrorMsg(`用户未登录，无法获取当前用户信息`));
+    // }
   }
 
   /**
@@ -94,10 +94,7 @@ class UserController {
    * 登录状态重置密码
    */
   async resetPassword (ctx) {
-    const user = ctx.session[ConstUser.CURRENT_USER];
-    if (!user) {
-      ctx.body = JSON.stringify(ServerResponse.createByErrorMsg(`用户未登录`));
-    }
+    const user = ctx.state.sessionUser;
     if (user) {
       const userService = new UserService();
       const {passwordOld, passwordNew} = ctx.request.body;
@@ -110,10 +107,7 @@ class UserController {
    * 更新用户信息
    */
   async updateInformation (ctx) {
-    let user = ctx.session[ConstUser.CURRENT_USER];
-    if (!user) {
-      ctx.body = JSON.stringify(ServerResponse.createByErrorMsg(`用户未登录`));
-    }
+    const user = ctx.state.sessionUser;
     if (user) {
       const userService = new UserService();
       const info = ctx.request.body;

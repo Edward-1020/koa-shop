@@ -12,9 +12,9 @@ app.use(bodyparser());
 app.use(userRouter.routes());
 app.use(categoryRouter.routes());
 
-app.on('error', function (err, ctx) {
+app.on('error', (err, ctx) => {
   if (process.env.NODE_ENV !== 'dev') {
-    ctx.body = err.message;
+    console.log('err', err.message);
   }
 });
 
