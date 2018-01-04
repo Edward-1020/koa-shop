@@ -15,4 +15,13 @@ const insert = (product) => {
   return Product.create(product);
 };
 
-module.exports = { updateByPrimaryKey, insert };
+const selectByPrimaryKey = (productId) => {
+  return Product.findOne({
+    attributes: [`id`, `category_id`, `name`, `subtitle`, `main_image`, `sub_images`, `detail`, `price`, `stock`, `status`, `create_time`, `update_time`],
+    where: {
+      'id': productId
+    }
+  });
+};
+
+module.exports = { updateByPrimaryKey, insert, selectByPrimaryKey };

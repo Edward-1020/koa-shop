@@ -23,5 +23,16 @@ class ProductManageController {
     const serverResponse = await productManageService.setSaleStatus(productId, status);
     ctx.body = JSON.stringify(serverResponse);
   }
+
+  async getDetail (ctx) {
+    const { productId } = ctx.query;
+    const productManageService = new ProductManageService();
+    const serverResponse = await productManageService.manageProductDetail(productId);
+    ctx.body = JSON.stringify(serverResponse);
+  }
+
+  async getList (ctx) {
+
+  }
 }
 module.exports = ProductManageController;

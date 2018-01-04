@@ -3,6 +3,14 @@ const path = require('path');
 
 const Category = sequelize.import(path.resolve(__dirname, '../model/mmall_category.js'));
 
+const selectCategoryPrimaryKey = (categoryId) => {
+  return Category.findOne({
+    where: {
+      'id': categoryId
+    }
+  });
+};
+
 const insert = (category) => {
   return Category.create({
     'parent_id': category.parentId,
@@ -43,4 +51,4 @@ const selectByPrimaryId = (categoryId) => {
   });
 };
 
-module.exports = { insert, updateCategorySelective, selectCategoryChildrenByParenId, selectByPrimaryId };
+module.exports = { insert, updateCategorySelective, selectCategoryChildrenByParenId, selectByPrimaryId, selectCategoryPrimaryKey };

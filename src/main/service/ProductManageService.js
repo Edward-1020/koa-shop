@@ -1,5 +1,7 @@
 const ServerResponse = require('../common/ServerResponse');
-const { updateByPrimaryKey, insert } = require('../dao/mm_product');
+const CategoryService = require('./CategoryService');
+const { updateByPrimaryKey, insert, selectByPrimaryKey } = require('../dao/mm_product');
+const { selectCategoryPrimaryKey } = require('../dao/mm_category');
 const moment = require('moment');
 
 class ProductManageService {
@@ -51,6 +53,24 @@ class ProductManageService {
       return ServerResponse.createBySuccessMsg(`更新产品销售状态成功`);
     }
     return ServerResponse.createBySuccessMsg(`更新产品销售状态失败`);
+  }
+
+  async manageProductDetail (productId) {
+    if (!productId) {
+      return ServerResponse.createByErrorMsg(`参数错误`);
+    }
+    const productModel = await selectByPrimaryKey(productId);
+    if (!productModel) {
+      return ServerResponse.createByErrorMsg(`产品已下架或删除`);
+    }
+    let productDetail = productModel.get();
+    const categoryModel = await selectCategoryPrimaryKey(productDetail.category_id);
+    if (!categoryModel) {
+      productDetail.parent_category_id = 0;
+    } else {
+      productDetail.parent_category_id = categoryModel.get('id');
+    }
+    return ServerResponse.createBySuccessData(productDetail);
   }
 }
 
