@@ -1,4 +1,5 @@
 const ProductManageService = require('../../service/ProductManageService');
+const FileService = require('../../service/FileService');
 
 class ProductManageController {
   /**
@@ -31,8 +32,33 @@ class ProductManageController {
     ctx.body = JSON.stringify(serverResponse);
   }
 
-  async getList (ctx) {
+  /**
+   * 分页查找
+   * @param {*} ctx
+   */
+  async getProductList (ctx) {
+    let { pageNum, pageSize } = ctx.query;
+    const productManageService = new ProductManageService();
+    const serverResponse = await productManageService.getProductList(pageNum, pageSize);
+    ctx.body = JSON.stringify(serverResponse);
+  }
 
+  /**
+   * 商品搜索
+   */
+  async searchProduct (ctx) {
+    const { productName, productId, pageNum, pageSize } = ctx.query;
+    const productManageService = new ProductManageService();
+    const serverResponse = await productManageService.searchProduct(productName, productId, pageNum, pageSize);
+    ctx.body = JSON.stringify(serverResponse);
+  }
+
+  /**
+   * 处理商品上传图片
+   */
+  async upload (ctx) {
+    const fileService = new FileService();
+    const serverResponse = fileService.upload();
   }
 }
 module.exports = ProductManageController;

@@ -24,8 +24,18 @@ router.get('/detail', userAdminCheck(), async (ctx, next) => {
 });
 
 router.get('/list', userAdminCheck(), async (ctx, next) => {
-  await productManageController.getDetail();
+  await productManageController.getList();
   await next();
+});
+
+router.get('/search', userAdminCheck(), async (ctx, next) => {
+  await productManageController.productSearch();
+  await next();
+});
+
+router.get('/upload', userAdminCheck(), async (ctx, next) => {
+  await productManageController.upload(ctx, next);
+  next();
 });
 
 module.exports = router;

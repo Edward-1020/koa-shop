@@ -1,6 +1,5 @@
 const ServerResponse = require('../common/ServerResponse');
-const CategoryService = require('./CategoryService');
-const { updateByPrimaryKey, insert, selectByPrimaryKey } = require('../dao/mm_product');
+const { updateByPrimaryKey, insert, selectByPrimaryKey, selectProductList, selectProduct } = require('../dao/mm_product');
 const { selectCategoryPrimaryKey } = require('../dao/mm_category');
 const moment = require('moment');
 
@@ -71,6 +70,31 @@ class ProductManageService {
       productDetail.parent_category_id = categoryModel.get('id');
     }
     return ServerResponse.createBySuccessData(productDetail);
+  }
+
+  /**
+   * 分页查找
+   * @param {*} pageNum
+   * @param {*} pageSize
+   */
+  async getProductList (pageNum, pageSize) {
+    const [rows, count] = await selectProductList();
+    let ProductList = rows.map(productModel => productModel.get());
+    return ServerResponse.createBySuccessData({
+      productList: ProductList,
+      pageNum: pageNum,
+      pageSize: pageSize,
+      total: count
+    });
+  }
+
+  async searchProduct (productName, productId, pageNum, pageSize) {
+    const productModelArr = await selectProduct(productName, productId, pageNum, pageSize);
+    if (!productModelArr.length) {
+      return ServerResponse.createByErrorMsg(`参数错误`);
+    }
+    let productArr = productModelArr.map(productModel => productModel.get());
+    return ServerResponse.createBySuccessData(productArr);
   }
 }
 
