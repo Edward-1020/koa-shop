@@ -1,7 +1,9 @@
 const ServerResponse = require('../common/ServerResponse');
 const { updateByPrimaryKey, insert, selectByPrimaryKey, selectProductList, selectProduct } = require('../dao/mm_product');
 const { selectCategoryPrimaryKey } = require('../dao/mm_category');
+const { uploadFile } = require('../util/file');
 const moment = require('moment');
+const path = require('path');
 
 class ProductManageService {
   /**
@@ -95,6 +97,21 @@ class ProductManageService {
     }
     let productArr = productModelArr.map(productModel => productModel.get());
     return ServerResponse.createBySuccessData(productArr);
+  }
+
+  /**
+   * 上传文件
+   */
+  async upload (ctx) {
+    const result = await uploadFile(ctx, {
+      fileType: 'img',
+      path: path.resolve(process.cwd(), './src', './static-files')
+    });
+    if (result.success) {
+      return ServerResponse.createBySuccessData(result);
+    } else {
+      return ServerResponse.createByErrorMsg(`传输文件失败`);
+    }
   }
 }
 

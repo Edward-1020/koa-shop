@@ -59,7 +59,7 @@ const selectProduct = (productName, productId, pageNum, pageSize) => {
       attributes: ['id', 'category_id', 'name', 'sbutitle', 'main_image', 'sub_images', 'price', 'stock'],
       where: {
         'id': productId,
-        '$like': productName
+        '$like': `%${productName}%`
       },
       limit: pageSize,
       offset: (((pageNum - 1) | 0) * pageSize) | 0

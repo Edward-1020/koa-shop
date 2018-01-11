@@ -33,7 +33,7 @@ router.get('/search', userAdminCheck(), async (ctx, next) => {
   await next();
 });
 
-router.get('/upload', userAdminCheck(), async (ctx, next) => {
+router.post('/upload', userAdminCheck(), async (ctx, next) => {
   await productManageController.upload(ctx, next);
   next();
 });

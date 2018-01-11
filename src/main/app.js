@@ -3,6 +3,7 @@ const bodyparser = require('koa-bodyparser');
 const session = require('koa-session');
 const userRouter = require('./router/portal/UserRouter');
 const categoryRouter = require('./router/backend/CategoryManageRouter');
+const productRouter = require('./router/backend/ProductManageRouter');
 const sessionConfig = require('./common/SessionConfig');
 
 const app = new Koa();
@@ -11,6 +12,7 @@ app.use(session(sessionConfig, app));
 app.use(bodyparser());
 app.use(userRouter.routes());
 app.use(categoryRouter.routes());
+app.use(productRouter.routes());
 
 app.on('error', (err, ctx) => {
   if (process.env.NODE_ENV !== 'dev') {

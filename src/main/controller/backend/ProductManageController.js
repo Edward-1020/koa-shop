@@ -1,5 +1,4 @@
 const ProductManageService = require('../../service/ProductManageService');
-const FileService = require('../../service/FileService');
 
 class ProductManageController {
   /**
@@ -57,8 +56,9 @@ class ProductManageController {
    * 处理商品上传图片
    */
   async upload (ctx) {
-    const fileService = new FileService();
-    const serverResponse = fileService.upload();
+    const productManageService = new ProductManageService();
+    const serverResponse = await productManageService.upload(ctx);
+    ctx.body = JSON.stringify(serverResponse);
   }
 }
 module.exports = ProductManageController;
