@@ -1,6 +1,7 @@
 module.exports = {
     "extends": "standard",
     rules: {
-        "semi": ["error", "always"]
+        "semi": ["error", "always"],
+        "camelcase": ["off", {properties: "never"}]
     }
 };

@@ -33,7 +33,7 @@ const selectProductList = (pageNum = 1, pageSize = 10) => {
   });
 };
 
-const selectProduct = (productName, productId, pageNum, pageSize) => {
+const selectProduct = (productName, productId, pageNum = 1, pageSize = 10) => {
   if (productId && !productName) {
     return Product.findOne({
       attributes: ['id', 'category_id', 'name', 'sbutitle', 'main_image', 'sub_images', 'price', 'stock'],
@@ -48,7 +48,9 @@ const selectProduct = (productName, productId, pageNum, pageSize) => {
     return Product.findOne({
       attributes: ['id', 'category_id', 'name', 'sbutitle', 'main_image', 'sub_images', 'price', 'stock'],
       where: {
-        '$like': productName
+        name: {
+          '$like': productName
+        }
       },
       limit: pageSize,
       offset: (((pageNum - 1) | 0) * pageSize) | 0
@@ -59,7 +61,9 @@ const selectProduct = (productName, productId, pageNum, pageSize) => {
       attributes: ['id', 'category_id', 'name', 'sbutitle', 'main_image', 'sub_images', 'price', 'stock'],
       where: {
         'id': productId,
-        '$like': `%${productName}%`
+        'name': {
+          '$like': `%${productName}%`
+        }
       },
       limit: pageSize,
       offset: (((pageNum - 1) | 0) * pageSize) | 0

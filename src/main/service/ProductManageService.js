@@ -91,6 +91,9 @@ class ProductManageService {
   }
 
   async searchProduct (productName, productId, pageNum, pageSize) {
+    if (!productId && !productName) {
+      return ServerResponse.createByErrorMsg(`参数错误`);
+    }
     const productModelArr = await selectProduct(productName, productId, pageNum, pageSize);
     if (!productModelArr.length) {
       return ServerResponse.createByErrorMsg(`参数错误`);

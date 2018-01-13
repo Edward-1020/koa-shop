@@ -51,4 +51,47 @@ const selectByPrimaryId = (categoryId) => {
   });
 };
 
-module.exports = { insert, updateCategorySelective, selectCategoryChildrenByParenId, selectByPrimaryId, selectCategoryPrimaryKey };
+/**
+ * 查询商品分类List
+ * @param {*} categoryId
+ * @param {*} categoryName
+ * @param {*} pageNum
+ * @param {*} pageSize
+ */
+const findAllCategory = (categoryId, categoryName, pageNum, pageSize) => {
+  if (categoryId && !categoryName) {
+    return Category.findAndCountAll({
+      where: {
+        'id': categoryId,
+        limit: pageSize,
+        offset: (((pageNum - 1) | 0) * pageSize) | 0
+      }
+    });
+  }
+
+  if (!categoryId && categoryName) {
+    return Category.findAndCountAll({
+      where: {
+        'name': {
+          '$like': `%${categoryName}%`,
+          limit: pageSize,
+          offset: (((pageNum - 1) | 0) * pageSize) | 0
+        }
+      }
+    });
+  }
+
+  if (categoryId && categoryName) {
+    return Category.findAndCountAll({
+      where: {
+        'id': categoryId,
+        'name': {
+          '$like': `%${categoryName}%`
+        },
+        limit: pageSize,
+        offset: (((pageNum - 1) | 0) * pageSize) | 0
+      }
+    });
+  }
+};
+module.exports = { insert, updateCategorySelective, selectCategoryChildrenByParenId, selectByPrimaryId, selectCategoryPrimaryKey, findAllCategory };
