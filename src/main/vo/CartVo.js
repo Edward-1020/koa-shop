@@ -6,4 +6,5 @@ class CartVo {
   }
 }
 
+// 购物车Vo
 module.exports = CartVo;
